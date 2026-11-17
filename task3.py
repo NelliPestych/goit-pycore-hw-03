@@ -4,14 +4,19 @@ import re
 def normalize_phone(phone_number):
     cleaned_number = re.sub(r'\D', '', phone_number)
 
-    if not cleaned_number.startswith('+'):
-        if cleaned_number.startswith('380'):
-            cleaned_number = '+' + cleaned_number
-        else:
-            cleaned_number = '+38' + cleaned_number
+    if not cleaned_number or len(cleaned_number) > 15:
+        return None
 
-    return cleaned_number
+    if phone_number.strip().startswith('+'):
+        return '+' + cleaned_number
 
+    if cleaned_number.startswith('380'):
+        return '+' + cleaned_number
+
+    if len(cleaned_number) == 10 and cleaned_number.startswith('0'):
+        return '+38' + cleaned_number
+
+    return None
 
 raw_numbers = [
     "067\\t123 4567",
